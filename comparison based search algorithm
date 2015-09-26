@@ -1,0 +1,27 @@
+/*
+Prove  that any searching  algorithm  based  on  comparisons  takes  time  
+(logn).
+
+*/
+
+
+Let S be the set where the element a to be found :
+
+in comparison based search we make basic comparison between two elements (a,b) to find out if they are equal or not. Thus we either have Yes or No as the outcome of each comparision.It can also be represented as decesion tree T.
+
+                                  root
+                		          Yes                 No
+                  	        Yes   No	          Yes      No
+
+for any two elements the path will be different as:
+Path for a in set S != Path for a+x in Set S
+Path for a in set S != Path for b in Set S
+
+Let the height of such decision tree be H thus from root to leaf node(Worst case) there will be H comparison - single comparison at root = H-1 comparison.Total height of any decision tree : logn (height of binary tree with n elements) and Total comparison in worst case ~H.
+
+=> total number of steps = H
+=> total time taken for these steps  =logn
+=> Lower bound of take time = logn
+
+Hence : 
+Any comparison based search algorithm will take omega(log n) time.
