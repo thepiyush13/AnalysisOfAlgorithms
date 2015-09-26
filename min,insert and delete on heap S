@@ -1,0 +1,74 @@
+/*min,insert and delete on heap S*/
+
+Let S be the heap.assuming the heap is represented as tree structure T with N elements, if i is the ith element in the heap , S(i) is the ith element in Heap S such that S(i) < children of S(i)
+ 
+
+MIN(S) 
+if S is empty 
+	return failure
+else 
+	return S(root)
+TIME COMPLEXITY : O(1) , since we only have to perform single lookup
+
+INSERT(S,a):
+/*let a be the element to be inserted in the heap S
+we should traverse the heap and find the correct location for element a at index j such that 
+data at S(j) = a and Child the ren of S(j) > S(j).After we have completed the process we should still have proper heap with the correct order
+*/
+
+Insert(S,a):
+	if S is empty 
+		return failure
+	else
+		position++
+		insert element a to S(position-1) 
+		heapify(position-1)
+		
+heapify(position):
+	if position==0
+		return
+	parent = position.parent
+	if S(parent) > S(position)
+		swap(parent,position)
+		heapify(parent)
+
+
+
+TIME COMPLEXITY : O(logN)
+
+DELETE(S,k):
+main():
+	val = S(k)
+	S(k) = S(rightmost leaf)
+	Nodes--
+	
+	if(parent of k is root OR S(k).parent < S(k))
+		heapifyUp(k)
+	else
+		heapifyDown(k)
+
+heapifyDown(k):
+	if S(k) has no child
+		return
+	child1 = left child
+	child2 = right child
+	
+	if S(k) has 2 childs:
+		if S(child1) < S(k) < S(child2)
+			do nothing
+		else
+			S(k)  = smallest( S(child1) ,  S(child2))
+	else 
+		S(k)  = smallest( S(child1), S(k))
+
+
+heapifyUp(k):
+	if k is the root
+		return
+	if parent of S(k) > S(k)
+		swap(S(k),S(k).parent)
+	else
+		return
+
+
+TIME COMPLEXITY : to delete a node k we need to perform operations = height of the heap = logN 
