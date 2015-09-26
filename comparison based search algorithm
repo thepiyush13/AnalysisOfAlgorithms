@@ -1,3 +1,9 @@
+/** 
+* Category : Advance Algorithms
+* Author : Piyush Tripathi
+* Texas A&M University
+*/
+
 /*
 Prove  that any searching  algorithm  based  on  comparisons  takes  time  
 (logn).
