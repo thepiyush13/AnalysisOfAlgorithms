@@ -1,3 +1,8 @@
+/** 
+* Category : Advance Algorithms
+* Author : Piyush Tripathi
+* Texas A&M University
+*/
 /*min,insert and delete on heap S*/
 
 Let S be the heap.assuming the heap is represented as tree structure T with N elements, if i is the ith element in the heap , S(i) is the ith element in Heap S such that S(i) < children of S(i)
