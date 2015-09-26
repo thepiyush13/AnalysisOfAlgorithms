@@ -1,3 +1,8 @@
+/** 
+* Category : Advance Algorithms
+* Author : Piyush Tripathi
+* Texas A&M University
+*/
 Merging T2(n elements) and T2(n/logn) elements
 
 /* Let the tree with n/logn  elements =  T1
