@@ -1,0 +1,62 @@
+Merging T2(n elements) and T2(n/logn) elements
+
+/* Let the tree with n/logn  elements =  T1
+tree with n elements = T2 */
+
+
+function main:
+ Node N = mergeTree(T1,T2)
+	 addNode(N, T1.root)
+List L = traverse(T)
+return L
+
+function mergeTree(T1,T2):
+	h1 = height(T1)
+	h2 = height(T2)
+	//assuming h2>h1
+	while(height <= h1+1){
+		current node = left(T2)
+		height++;
+	}
+	//found the insertion point for T1 tree
+	Node N1 = current node
+	return N1
+	
+
+
+
+
+function addNode(Node N1,elm):
+if(N1 has 2 children)
+	N1.addChild = elm // right node for appending the tree
+	return
+else if(N1 has >= 3 children)
+	Nodes(N11,N12) = Split(N1) //split N1 into two nodes
+	median = Median(N11,N12) //find the median node
+	addNode(parent,median) //go up to the parent
+	
+
+	
+function traverse:
+	if T is null 
+		return
+	if T is leaf
+		add(L,T.data)
+	else if (T has 2 children)
+		traverse T.left
+		add(L,T.data)
+		traverse T.right
+	else if (T has 3 children)
+		traverse T.left
+		add(L,T.data)
+		traverse T.middle
+		add(L,T.data)
+		traverse T.right
+		add(L,T.data)
+	return L
+
+
+
+
+
+TIME COMPLEXITY : O(n)
