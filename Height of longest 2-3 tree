@@ -1,0 +1,19 @@
+/*Give a formal proof that a 2-3 tree with n leaves has height bounded by log
+2n */
+
+By definition any 2-3 tree T of N elements:
+2 <= child nodes at each node <= 3
+
+Thus we can see that to find out the upper limit  on the height of such a 2-3 tree , we need to consider a tree having 2 child nodes at each node.
+
+max height  of 2-3 tree T having at max 3 child nodes at each node  = H3
+max height  of 2-3 tree T having at max 2 child nodes at each node  = H2
+
+Total no of elements N at H3 = 3^H3
+Total no of elements N at H2 = 2^H2
+
+Thus N>=2^H2
+so  H2<=logN             (base2)
+
+Hence the Height of longest 2-3 tree will be less than or equal to logN( where N is the number of elements in the tree)
+=> Upper bound in 2-3 Tree ~ logN
