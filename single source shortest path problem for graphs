@@ -1,0 +1,25 @@
+Develop a linear time ( O(n+m) ) algo that solves the single source shortest path problem for graphs 
+whose edge weights are positive integers bounded by 20(use dijkstra's or breadth first search)
+
+since BFS expects edge weights to be uniform(1) but in case our weight can change thus 
+the shoretst path may not be least expensive(in terms of weight)
+thus we split the graph into wegith 1 edges
+
+WEIGHTEDGRAPH:G,source
+	foreach edge u,v in G
+		new graph Gnew =
+		foreach edge in Graph G:
+			split into 20 edges with each edge weight = 1
+		
+		shortestPath = BFS(Gnew,source)
+		return shortestPath
+BFS: G, source
+	Mark source
+	queue source
+	while q is not empty:
+		v = queue.dequeue
+		foreach w in G.adj(v):
+			if w is not marked :
+				save edge -w
+				mark w
+	return mark
