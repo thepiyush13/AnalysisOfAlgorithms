@@ -1,0 +1,48 @@
+Write a pseudocode for dijkstra's algorithm that solves the single source shortest path problem.
+Analyze the complexity of the algorithm (assume it uses heap for fringes). 
+Give a formal proof that the algo works correctly when the edge weights are all non-negative.
+
+Algorithm:
+Dijkstra:
+	//init 
+	// G is the graph provided
+	// d[x] = distance of node x from the source
+	// p[x] = parent node of any node x
+	// h is minimum heap 
+	// S is the set of minimum edges 
+// s is the source vertex
+	foreach node v in Graph G:
+		d[v] = POSITIVE_INFINITY
+		p[v] = null
+	//init source
+		d[s] = 0
+		p[s] = null
+		h = heap of all nodes of G
+S.add(s)
+
+	while(h is not empty):
+		u = minimum element of h =  min(h)
+		S.add(u)
+		remove u from h
+		foreach node v adjacent of u:
+			Relax(u,v)
+	return s
+
+
+Relax(u,v):
+	currentDistance = d[u] + weightOf(u-v)
+	previousDistance = d[v]
+	if(currentDistance < previousDistance):
+		d[v] = currentDistance
+		p[v] = u
+
+Time Complexity:
+if there are v nodes in the graph G then the above algorithm will take O(v) for the first step, O(1) for finding minimum element from the heap, O(v) for going through adjacent vertices of u  and O(logv) for removing element from the min heap. thus for a graph with E edges and V vertices
+O(T) = O(E+V) * O(logV) = O((E+V)logV)
+since it is a connected graph so E< V*V so time complexity = O(ElogV)
+PROOF:
+if v-w is the edge 
+v-w every edge is relax once 
+from source the distance can only decrease from originally assigned value
+as d[vertex] <= d[v] + (v-w)edge weight
+this works until entire algorithm is run thus shortest paths is added to the set
