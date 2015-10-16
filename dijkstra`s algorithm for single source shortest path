@@ -1,7 +1,7 @@
 Write a pseudocode for dijkstra's algorithm that solves the single source shortest path problem.
 Analyze the complexity of the algorithm (assume it uses heap for fringes). 
 Give a formal proof that the algo works correctly when the edge weights are all non-negative.
-
+ 
 Algorithm:
 Dijkstra:
 	//init 
