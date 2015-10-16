@@ -1,0 +1,25 @@
+Write a pseudocode for kruskal's algo that solves minimum spanning tree problem.
+Analyze the complexity(assume union-find-makeset operation takes O(logn) time).
+Prove that algo works correctly.
+
+Kruskal( e,v,w):
+	//e is the edge. v the vertex and w in the adjacent vertex
+	Set S 
+	foreach vertex v in Graph G:
+		makeSet(v)
+	sort e by weight into non decreasing order 
+	foreach edge vertex u connecting v in e
+		if u and v are both on makeSet:
+			S = S U {u,v}
+		union(u,v)
+return S	
+
+Time complexity
+ElogV OR ElogE as it is a connected graph
+Proof: by contradiction
+By induction if T is the tree from kruskal algorithm and T1 is the minimal spanning tree
+e is the edge in T1 such that e is of minimum weight and not in T1
+if we can form a cycle with e thus T becomes the minimum spanning tree 
+we consider edge in sorted order 
+e is crossing edge of minimum weight
+algorithm is taking minimal-weight crossing edge
