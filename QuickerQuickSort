@@ -1,0 +1,20 @@
+Modify the quicksort algo so that the pivot is selected using the linear-time O(nlogn) in the worst case.
+Discuss why this algo is not used in practice.
+
+public int QUICKSORT(int[] inArray, int left, int right) {
+    if (left<right) {
+        int median=MEDIANFIND(inArray, len(inArray)/2 );
+        QUICKSORT(inArray, left, median-1)
+        QUICKSORT(inArray, median+1, right)
+    }
+}
+
+
+MEDIANFIND: S,K
+	if |S| <=20
+	Groups G = S -> 5 element group -> median of each group
+	Set D = G.MAKESET(n/5)
+		m = MEDIANFIND(Sn/5,n/10)
+
+The median-based quicksort is rarely used in practice because it tends
+to have a larger constant than other quicksort implementations.
