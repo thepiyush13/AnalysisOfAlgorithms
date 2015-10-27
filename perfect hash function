@@ -1,0 +1,30 @@
+/*
+
+LetU=f(a;b)j1an;1bmg, whereaandbare integers.  Suppose that we wantto store a set ofnelements fromUinto a hash table of sizemusing a hash functionh.  Showthat no matter how you choose the hash functionh, there is a setShofnelements inU(Shisrelated toh) so that all elements inShare hashed into the same slot in the hash table (thus forthis particular setSh, the search algorithm based onhtakes time 
+(n) in the worst case).
+
+*/
+
+U{a,b} means all numbers not including a and b
+=> assume n>m
+foreach element x in n do:
+	Set S = {x,m} from universal set U
+	foreach element e of Set S:
+	( h(e) -> m )  //hash to table of size m
+	if collision -> add to the linked list in the slot
+end loop
+end loop
+
+There will be a set of n elements in U when all the elements are hashed into the same slot only if :
+h(x) = h(y)
+thus x = y
+outer loop = n times
+=>everytime loop runs max value m(or m-1) is always present in the set 
+=> for first m values get hashed uniformly into the table( probability is n/m)
+=>next time everytime the loop runs, hash of element m keeps getting added to same slot
+=>total of n times
+thus linked list size for element m (or m-1) = n
+so time taken will be comparison based search in the linkedlist = sigma(n)
+foreach step we traverse it takes contant time O(1) thus for worst case we traverse n elements deep int the list , thus total time :
+n* O(1) = O(n)
+thus worst case time complexity is O(n)
