@@ -1,0 +1,47 @@
+/*
+(Question 24.1-5, Textbook, p. 655)  LetG= (V;E) be a weighted directed graph.  DevelopanO(nm)-time algorithm that nds for each vertexvthe value(v), which is dened as:(v) = minw2Vfthe length of the shortest path inGfromvtowg:
+*/
+
+
+The weighted directed  Graph G = (E,V)
+for each vertex v, sigma(v) = min{length of shortest path in G from v-w} = MINFIND(G,v)
+
+We solve this problem by traversing every vertex and their adjacent vertex and keeping track of all the minimum in a  set , then we find the minimum of that set
+MINFIND:
+distance[] = distance matrix for vertex in graph
+foreach v in graph:
+	distance[v] = POSITIVE_INFINITY
+	parent[v] = NULL
+foreach edge e(u-v) adjacent to v:
+	distance[v] = min (  distance[v], weight of edge(u-v) )
+//now that distance[v] contains shortest path to v
+// now we can use bellman ford algorithm to get the minimum for v
+BELLMAN(V,E,v)
+sigma(v) = min(d[])
+
+BELLMAN(V,E,S):
+	foreach v in vertices:
+		if v is s :
+			d[v]= 0
+		else:
+			d[v] = POSITIVE_INFINITY
+			parent[v]  = NULL
+			
+	for 1 to all vertices:
+		foreach edge u-v weight w in edges:
+			if d[v] > d[u] + w(u-v)
+			d[v] = d[u] + w(u-v)
+			parent[v] = u
+	//detect negative cycle
+	foreach edge u-v weight w in edges:
+		if d[v] > d[u] + w(u-v):
+			error
+	return d,p
+	
+
+Time complexity:
+ the first loop in main function runs O(v) times, the first declaration takes O(1) time , suppose there are n nodes in the graph and m node adjacent to each graph thus foreach loop takes n X m time to loop through all the nodes, adding to set can be assumed to be in constant time,  lets say we have n elements thus total time including the bellman ford would take :
+ O(n) * O(m) + c1
+ ~O(nm)
+ thus total time complexity will be O(mn)
+= O(nm)
