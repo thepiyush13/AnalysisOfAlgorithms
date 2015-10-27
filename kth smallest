@@ -1,0 +1,39 @@
+/*
+ In the linear-time algorithmRank(S;k) we discussed in class, which returns thekth smallestelement  of  the  setS,  we  rst  divided  the  input  setSinto  groups  of  5  elements.   Show  thatif we modify the algorithm by using groups of 7 elements instead of groups of 5 elements, thealgorithm still works and runs in linear time.  Discuss which version you would use in practice.
+ */
+ in median find algorithm we divide the elements into group of 5 elements, the same algorithm can be applied if we divide the group into 7 elements.
+
+Rank(S,k):
+	if IS| <= 10 
+		workout directly 
+		return
+	partition S into group of 7 elements
+		find median for each group
+Form a set S/7 from group medians above
+	m = Rank(S/7, n/10)
+divide S into Ssmall and Slarge by m
+if k<= |SSmall|
+	return Rank(Ssmall, k)
+else 
+	return Rank(Slarge, k-|Ssmall|)
+Time Complexity :
+partitioning takes O(n) time, finding m from recursive function takes O(n) time and recursive partitioning function Ssmall and Slarge takes O(m) time .Complete algorithm thus takes O(n) time for n elements.
+
+Proof
+Total time complexity  T(n) =
+C1(n) + T(n/7) + T(7n/10)  	for n>=10
+C1  				for n<10
+
+T(n) = C1*n/7 + t1*n/10 = t2*n/10
+T(n) = n/7 + t1*n/10 = t2*n/10
+=> we can say for all n>=10
+T(n) = C1(n) + T(n/7) + T(7n/10)
+T(n) = C1(n) + 10C1*T(n/7) +10C1* T(7n/10)
+T(n) <= 10C1*n
+
+for n<10
+T(n) = 10C1*n	
+
+Thus it is clear that the entire algorithms finds Kth smallest in O(n) time even when we divide the elements in group of 7.
+which is prefered ?
+I think the version where we divide it into 5 groups is prefered because if we divide the group in 7 elements we might have fewer groups but computational time for each group increase as the number of elements increases which might lead to slightly more time taken overall.
