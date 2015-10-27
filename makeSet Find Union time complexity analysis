@@ -1,0 +1,27 @@
+/*
+Suppose  that  we  have  a  sequence  of  MakeSet-Find-Union  operations  in  which  no  Findappears before any Union.  What is the computational time for this sequence?
+*/
+
+In makeSet-Find-Union operation no Find appears before any Union:
+
+Let us imagine n elements on which we are performing these operations
+Let us see what individual operation does:
+MakeSet - will create set of n elements 
+Find - finds the element by traversing 
+Union - connects edges 
+
+for m operations on n elements : if it of format :
+MakeSet    [Union    Union     Union     Union…….m-2]    Find
+
+total no of times Union is run = m-2, length of total edge  = (m-2) *logn
+total no of times MakeSet is run = 1 
+thus before find runs the length of the edge  = k*logn (1<=k<=m)
+
+total time taken by the Find 
+= total length created by Union X total number of  operations
+= k*logn 
+= (m-2) *logn     //worst case
+~m*logn
+
+thus this represents the worst case for Union Find operation and the total time complexity for it will  
+T(n) = O(mlogn)
