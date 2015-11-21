@@ -8,7 +8,7 @@ public class GraphGenerator {
 		int maxVertices = 5000;
 		int maxDegree = 1000;
 		int minDegree = 6;
-		//genDenseGraph(maxDegree,maxVertices);
+		genDenseGraph(maxDegree,maxVertices);
 		genSparseGraph(minDegree,maxVertices);
 		
 			
@@ -21,28 +21,46 @@ public class GraphGenerator {
 		int weight = 0;
 		int maxWeight = 100;
 		boolean getOut = false;	
-		int maxEdges = maxVertices*10;
+		int maxEdges = maxVertices*100;
 		boolean validEdge = true;	
 		String fileName = "";
-		Vertex rndNode ;
-		int rndInt = 0;
+				int rndInt = 0;
+		StringBuilder r = new StringBuilder();
+		
 		for(int i=0;i<maxVertices;i++){			
 			//pick any one and get it`s degree
-			Vertex node = new Vertex("vertex"+i,i);//randomGenerator.nextInt(maxVertices);			
+			//System.gc();
+			r.append("vertex");
+			r.append(i);
+			Vertex node = new Vertex(r.toString(),i);//randomGenerator.nextInt(maxVertices);
+			r.setLength(0);
 			//if degree is less then required find number of edges to add
 			int nodeDegree  = MyGraph.degree(node);
-			System.out.println("node:"+node);
+			System.out.println("node:"+node.name);
 			if(nodeDegree < maxDegree){
 				int reqEdges = maxDegree-nodeDegree ;
 				for(int j=1;j<=reqEdges;j++){					
 					//to be added node should not be same, already connected or filled with edges	
-					rndInt =  randomGenerator.nextInt(maxVertices);
-					rndNode = new Vertex("vertex"+rndInt,rndInt);
+					/*rndInt =  randomGenerator.nextInt(maxVertices);					
+					r.append("vertex");
+					r.append(rndInt);
+					Vertex rndNode = new Vertex(r.toString(),rndInt);
+					r.setLength(0);*/
 					int count=0;
 					validEdge = true;
-					while(rndNode.equals(node) || MyGraph.degree(rndNode)>=maxDegree || MyGraph.isConnected(node, rndNode) ){
+					Vertex validNode = null;
+					while(true){
 						rndInt =  randomGenerator.nextInt(maxVertices);
-						rndNode = new Vertex("vertex"+rndInt,rndInt);							
+						r = new StringBuilder();
+						r.append("vertex");
+						r.append(rndInt);
+						Vertex rndNode = new Vertex(r.toString(),rndInt);	
+						r.setLength(0);
+						if(!rndNode.equals(node) && MyGraph.degree(rndNode)<maxDegree && !MyGraph.isConnected(node, rndNode)  ){
+							validNode = rndNode;							
+							break;
+						}
+						rndNode = null;
 						if(count >= maxEdges){
 							validEdge = false;
 							break;
@@ -51,9 +69,13 @@ public class GraphGenerator {
 						
 					}
 					//add edge for this node
-					if(validEdge==true)
+					if(validEdge==true ){
 						weight = rndWeight.nextInt(maxWeight);
-						MyGraph.addEdge(node, rndNode,weight);
+						MyGraph.addEdge(node, validNode,weight);
+						validNode = null;
+					}
+						
+						
 				}
 			}
 			
@@ -105,9 +127,10 @@ public class GraphGenerator {
 						
 					}
 					//add edge for this node
-					if(validEdge==true)
+					if(validEdge==true){
 						weight = rndWeight.nextInt(maxWeight);
 						MyGraph.addEdge(node, rndNode,weight);
+					}
 				}
 			}
 			
@@ -129,12 +152,12 @@ public class GraphGenerator {
 			file = new File("./res/"+fileName);
 			bfr = new BufferedWriter(new FileWriter(file));
 			int V = MyGraph.getV();
-			Map<Vertex,List<Vertex>> x = MyGraph.getAdj();		
-			for(Vertex v :x.keySet()){
+			Map<String,List<Vertex>> x = MyGraph.getAdj();		
+			for(String v :x.keySet()){
 				StringBuilder s = new StringBuilder();	
-				s.append(v.toString() + ":");
+				s.append(v.toString() + " ");
 				for (Vertex w : MyGraph.adj(v))
-					s.append( w.toString() + ",");
+					s.append( w.toString() + " ");
 				s.append("\n");
 				bfr.write(s.toString());
 				s=null;
