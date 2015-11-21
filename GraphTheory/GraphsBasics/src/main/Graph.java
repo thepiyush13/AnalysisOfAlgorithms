@@ -1,12 +1,11 @@
 package main;
 import java.util.*;
-import java.io.*;
 
-public class Graph {
-	
-	private static final int vertices = 100;
-	private static final int edges = 10;
-	private Map<Integer,List<Integer>> adj ; //adjacency list
+import main.Vertex;
+
+
+public class Graph {	
+	private Map<Vertex,List<Vertex>> adj ; //adjacency list
 	private final int V;  //vertex	
 	private int E;  //edges
 	private  int[][] edgeMatrix   ;
@@ -20,9 +19,10 @@ public class Graph {
 	public Graph(int V){
 		this.V = V;
 		this.E = 0;
-		this.adj = new HashMap<Integer,List<Integer>>();
-		for(int i=0;i<V;i++){			
-			this.adj.put(i,new ArrayList<Integer>());
+		this.adj = new HashMap<Vertex,List<Vertex>>();
+		for(int i=0;i<V;i++){	
+			Vertex v  = new Vertex("vertex"+i,i);
+			this.adj.put(v,new ArrayList<Vertex>());
 		}
 		//init edge matrix
 		this.edgeMatrix = new int[V][V];
@@ -33,27 +33,30 @@ public class Graph {
 		}
 	}					
 	
-	public void addEdge(int v, int w, int weight){
-		adj.get(v).add(w);
-		adj.get(w).add(v);
-		this.edgeMatrix[v][w] = weight;
-		this.edgeMatrix[w][v] = weight;
+	public void addEdge(Vertex v, Vertex w, int weight){
+		
+		this.adj.get(v).add(w);
+		this.adj.get(w).add(v);
+		this.edgeMatrix[v.value][w.value] = weight;
+		this.edgeMatrix[w.value][v.value] = weight;
 		E++;
 	}
-	public int degree(int v){
-		int degree = 0;
-		for(int w: adj(v)){
-			degree++;
-		}
+	public int degree(Vertex v){
+		int degree = 0;		;
+		for(Vertex w : adj(v)){
+			degree++;			
+		}		
 		return degree;
 	}
 	
-	public Iterable<Integer> adj(int v){
-		return adj.get(v);
+	public List<Vertex> adj(Vertex v){		
+		 List<Vertex> out =   this.adj.get(v);
+		 out = (out==null) ? new ArrayList<Vertex>() : out;
+		 return out;
 	}
-	public boolean isConnected(int v, int w){
-		for(int x : adj(v)){
-			if(x==w){
+	public boolean isConnected(Vertex v, Vertex w){
+		for(Vertex x : adj(v)){
+			if(x.equals(w)){
 				return true;
 			}
 		}
@@ -62,17 +65,20 @@ public class Graph {
 	public int getEdgeWeight(int from, int to){
 		return this.edgeMatrix[from][to];
 	}
-	
+	public Map<Vertex,List<Vertex>> getAdj(){
+		return this.adj;
+	}
 
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append(V + " vertices, " + E + " edges\n" );
-		for (int v = 0; v < V; v++) {
+		for(Vertex v : this.adj.keySet()){
 			s.append(v + ": ");
-			for (int w : this.adj(v))
+			for (Vertex w : this.adj(v))
 				s.append( w + " ");
 			s.append("\n");
 		}
+		
 		return s.toString();
 	}
 }
