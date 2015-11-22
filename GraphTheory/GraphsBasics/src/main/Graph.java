@@ -2,14 +2,21 @@ package main;
 import java.util.*;
 
 import main.Vertex;
+import main.Edge;
 
 
 public class Graph {	
-	private Map<String,List<Vertex>> adj ; //adjacency list
-	private final int V;  //vertex	
+	private Map<Integer,List<Vertex>> adj ; //adjacency list
+	private  int V;  //vertex	
 	private int E;  //edges
 	private  int[][] edgeMatrix   ;
-	
+	private List<Edge> edgeList = new ArrayList<Edge>();
+	public void setV(int v) {
+		V = v;
+	}
+	public void setE(int e) {
+		E = e;
+	}
 	public int getV() {
 		return V;
 	}
@@ -19,13 +26,11 @@ public class Graph {
 	public Graph(int V){
 		this.V = V;
 		this.E = 0;
-		this.adj = new HashMap<String,List<Vertex>>();
+		this.adj = new HashMap<Integer,List<Vertex>>();
 		StringBuilder r = new StringBuilder();
-		for(int i=0;i<V;i++){	
-			r.append("vertex");
-			r.append(i);
-			Vertex v  = new Vertex(r.toString(),i);
-			this.adj.put("vertex"+i,new ArrayList<Vertex>(1000));			
+		for(int i=0;i<V;i++){				
+			Vertex v  = new Vertex(i,i);
+			this.adj.put(i,new ArrayList<Vertex>(1000));			
 			v=null;
 		}
 		r=null;
@@ -57,18 +62,16 @@ public class Graph {
 		
 		this.edgeMatrix[v.value][w.value] = weight;
 		this.edgeMatrix[w.value][v.value] = weight;
+		this.edgeList.add(new Edge(v,w,weight));
 		E++;
 	}
 	public int degree(Vertex v){
 		int degree = 0;		;
-		degree = adj(v.name).size();
-//		for(Vertex w : adj(v.name)){
-//			degree++;			
-//		}		
+		degree = adj(v.name).size();	
 		return degree;
 	}
 	
-	public List<Vertex> adj(String name){		
+	public List<Vertex> adj(int name){		
 		 List<Vertex> out =   this.adj.get(name);
 		 out = (out==null) ? new ArrayList<Vertex>() : out;
 		 return out;
@@ -78,25 +81,19 @@ public class Graph {
 			return true;
 		}else{
 			return false;
-		}/*			
-		for(Vertex x : adj(v.name)){
-			if(x.equals(w)){
-				return true;
-			}
 		}
-		return false;*/
 	}
 	public int getEdgeWeight(int from, int to){
 		return this.edgeMatrix[from][to];
 	}
-	public Map<String,List<Vertex>> getAdj(){
+	public Map<Integer,List<Vertex>> getAdj(){
 		return this.adj;
 	}
 
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append(V + " vertices, " + E + " edges\n" );
-		for(String v : this.adj.keySet()){
+		for(Integer v : this.adj.keySet()){
 			s.append(v + ": ");
 			for (Vertex w : this.adj.get(v))
 				s.append( w + " ");
@@ -105,4 +102,9 @@ public class Graph {
 		
 		return s.toString();
 	}
+	public List<Edge> getEdgeList() {
+		// TODO Auto-generated method stub
+		return this.edgeList;
+	}
+	
 }

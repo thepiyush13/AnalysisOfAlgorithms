@@ -1,234 +1,143 @@
-//package main;
-//import java.util.*;
-//import java.io.*;
-//
-//import org.graphstream.graph.*;
-//import org.graphstream.graph.implementations.*;
-//
-//
-//public class Run {
-//	
-//	public static void main(String[] args) {	
-//		int maxVertices = 5000;
-//		int maxDegree = 1000;
-//		//genDenseGraph(maxDegree,maxVertices);
-//		genSparseGraphOld(100,5000);
-//		/* */
-//			
-//	}
-//	private static void genDenseGraph(int maxDegree, int maxVertices){
-//		//Get random elements		
-//		Graph MyGraph   = new Graph(maxVertices);		
-//		Random randomGenerator = new Random();	
-//		boolean getOut = false;		
-//		String fileName = "";
-//		int rndNode = 0;
-//		for(int i=0;i<maxVertices;i++){			
-//			//pick any one and get it`s degree
-//			int node = i;//randomGenerator.nextInt(maxVertices);			
-//			//if degree is less then required find number of edges to add
-//			int nodeDegree  = MyGraph.degree(node);
-//			System.out.println("node:"+node);
-//			if(nodeDegree < maxDegree){
-//				int reqEdges = maxDegree-nodeDegree ;
-//				for(int j=1;j<=reqEdges;j++){					
-//					//to be added node should not be same, already connected or filled with edges					
-//					while(rndNode==node || MyGraph.degree(rndNode)>=maxDegree || MyGraph.isConnected(node, rndNode) ){
-//						rndNode = randomGenerator.nextInt(maxVertices);						
-//					}
-//					//add edge for this node
-//					//if(getOut==false)
-//						//MyGraph.addEdge(node, rndNode);
-//				}
-//			}
-//			
-//		}
-//		//System.out.println(MyGraph.toString());
-//		//saveGraphToFile(MyGraph,"Vertices"+maxVertices+"Degree"+maxDegree+"Graph.txt")  ;
-//		fileName = "Vertices"+maxVertices+"Degree"+maxDegree+"Graph.txt";
-//		File file;
-//		BufferedWriter bfr = null;
-//		try{
-//			file = new File("./res/"+fileName);
-//			bfr = new BufferedWriter(new FileWriter(file));
-//			int V = MyGraph.getV();
-//			for (int v = 0; v < V; v++) {
-//				StringBuilder s = new StringBuilder();
-//				s.append(v + ": ");
-//				for (int w : MyGraph.adj(v))
-//					s.append( w + " ");
-//				s.append("\n");				
-//				bfr.write(s.toString());
-//				s=null;
-//			}					
-//			
-//		}
-//		catch(Exception e){
-//			System.out.println(e.getMessage());						
-//		}finally{
-//			try {
-//				bfr.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		
-//		
-//		
-//	}
-//	private static void genSparseGraph(int maxDegree, int maxVertices){
-//		//Get random elements		
-//		Graph MyGraph   = new Graph(maxVertices);		
-//		Random randomGenerator = new Random();	
-//		boolean getOut = false;		
-//		String fileName = "";
-//		int rndNode = 0;
-//		for(int i=0;i<maxVertices;i++){			
-//			//pick any one and get it`s degree
-//			int node = i;//randomGenerator.nextInt(maxVertices);			
-//			//if degree is less then required find number of edges to add
-//			int nodeDegree  = MyGraph.degree(node);
-//			System.out.println("node:"+node);
-//			if(nodeDegree < maxDegree){
-//				int reqEdges = maxDegree-nodeDegree ;
-//				for(int j=1;j<=reqEdges;j++){					
-//					//to be added node should not be same, already connected or filled with edges	
-//					rndNode = randomGenerator.nextInt(maxVertices);
-//					while(rndNode==node || MyGraph.degree(rndNode)>=maxDegree || MyGraph.isConnected(node, rndNode) ){
-//						rndNode = randomGenerator.nextInt(maxVertices);						
-//					}
-//					//add edge for this node
-//					//if(getOut==false)
-//					//	MyGraph.addEdge(node, rndNode);
-//				}
-//			}
-//			
-//		}
-//		//System.out.println(MyGraph.toString());
-//		//saveGraphToFile(MyGraph,"Vertices"+maxVertices+"Degree"+maxDegree+"Graph.txt")  ;
-//		fileName = "Vertices"+maxVertices+"Degree"+maxDegree+"Graph.txt";
-//		File file;
-//		BufferedWriter bfr = null;
-//		try{
-//			file = new File("./res/"+fileName);
-//			bfr = new BufferedWriter(new FileWriter(file));
-//			int V = MyGraph.getV();
-//			for (int v = 0; v < V; v++) {
-//				StringBuilder s = new StringBuilder();
-//				s.append(v + ": ");
-//				for (int w : MyGraph.adj(v))
-//					s.append( w + " ");
-//				s.append("\n");				
-//				bfr.write(s.toString());
-//				s=null;
-//			}					
-//			
-//		}
-//		catch(Exception e){
-//			System.out.println(e.getMessage());						
-//		}finally{
-//			try {
-//				bfr.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//		
-//		
-//		
-//	}
-//	private static void genSparseGraphOld(int maxDegree, int maxVertices){
-//		//Get random elements		
-//		Graph MyGraph   = new Graph(maxVertices);		
-//		Random randomGenerator = new Random();	
-//		boolean getOut = false;		
-//		List<Integer> pool = new ArrayList<Integer>();
-//		SingleGraph graph = new SingleGraph("Tutorial 1");
-//		int rndNode = 0;
-//		for(int i=0;i<maxVertices;i++){
-//			pool.add((Integer)i);
-//			graph.addNode(i+"n");
-//		}
-//		for(int i=0;i<maxVertices;i++){			
-//			//pick any one and get it`s degree
-//			int node = i;//randomGenerator.nextInt(maxVertices);			
-//			//if degree is less then required find number of edges to add
-//			int nodeDegree  = MyGraph.degree(node);
-//			
-//			String extra = rndNode+"";//(pool.size()<10) ? rndNode+"" : "NA";
-//			
-//			System.out.println("node:"+node+"pool.size():"+pool.size()+"Extra:"+extra);
-//			if(nodeDegree < maxDegree){
-//				int reqEdges = maxDegree-nodeDegree ;
-//				for(int j=1;j<=reqEdges;j++){					
-//					//to be added node should not be same, already connected or filled with edges					
-//					while(rndNode==node  || MyGraph.isConnected(node, rndNode) ){						
-//						rndNode = pool.get(randomGenerator.nextInt(pool.size()));						
-//					}
-//					//add edge for this node
-//					//if(getOut==false)
-//						//MyGraph.addEdge(node, rndNode);
-//						//graph.addEdge(node+"n"+rndNode+"n", node+"n", rndNode+"n");
-//				}
-//				//redefine pool size
-//				
-//			}
-//			pool = removeFromPool(pool, node);
-//			
-//		}
-//		//System.out.println(MyGraph.toString());
-//		//saveGraphToFile(MyGraph,"Vertices"+maxVertices+"Degree"+maxDegree+"Graph.txt")  ;
-//		//System.out.println("Completed!"+"pool:"+pool.size());
-//		 graph.display();
-//		 
-//		
-//	}
-//	private static boolean saveGraphToFile(Graph G, String fileName) {
-//		String result = G.toString();
-//		return saveTextToFile(result, fileName);
-//		
-//	}
-//	public static boolean saveTextToFile(String text, String fileName){
-//		try{
-//			File file = new File("./res/"+fileName);
-//			BufferedWriter bfr = new BufferedWriter(new FileWriter(file));
-//			bfr.write(text);
-//			bfr.close();
-//			return true;
-//		}
-//		catch(Exception e){
-//			System.out.println(e.getMessage());
-//			return false;
-//		}
-//	}
-//	private static void createBasicGraph(){
-//		try{
-//			File file = new File("./res/tinyG.txt");					
-//			Scanner scan = new Scanner(file);		
-//			int V = Integer.parseInt(scan.nextLine());
-//			int E = Integer.parseInt(scan.nextLine());
-//			Graph MyGraph   = new Graph(V);				
-//			for(int i=0;i<E;i++){
-//				int v = scan.nextInt();
-//				int w = scan.nextInt();
-//				//MyGraph.addEdge(v, w);
-//			}
-//			System.out.println(MyGraph.toString());
-//		}
-//		catch(Exception e){
-//			System.out.println(e.getMessage());
-//		}
-//	}
-//	private static List<Integer> removeFromPool(List<Integer> pool , int remove){
-//		ListIterator lt = pool.listIterator();
-//		while(lt.hasNext()){
-//			if(lt.next().equals(remove)){
-//				lt.remove();
-//			}
-//		}
-//		return pool;
-//	}
-//
-//}
+package main;
+
+import java.util.*;
+import java.io.*;
+
+public class Run {
+
+	public static void main(String[] args) throws IOException {
+
+		Vertex source = new Vertex(0, 0);
+		int t = 0;
+		Vertex destination = new Vertex(0, 0);
+		Graph denseGraph = null;
+		Graph sparseGraph = null;
+		int vertexMaxDegree = 10;
+		double startTime = 0, endTime = 0, duration = 0;
+		Random rn = new Random();
+
+		double[][] denseGraphData = new double[50][3];
+		double[][] sparseGraphData = new double[50][3];
+		int denseLopp = 0, sparseLoop = 0;
+		System.out.print("Processing...");
+		
+		for (int outerLoop = 0; outerLoop < 5; outerLoop++) {
+
+			int maxVertices = 5000;
+			int maxDegree = 1000;
+			int minDegree = 6;
+			GraphGenerator gn = new GraphGenerator();
+			sparseGraph = GraphGenerator.genSparseGraph(minDegree, maxVertices);
+
+			for (int innerLoop = 0; innerLoop < 5; innerLoop++) {
+				t = rn.nextInt(maxVertices);
+				source = new Vertex(t, t);
+				t = rn.nextInt(maxVertices);
+				destination = new Vertex(t, t);
+				GraphGenerator.connectSourceDestination(sparseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerLoop + "  for sparse graph ");
+				sparseGraphData[sparseLoop][0] = calcTime("dijkstra", sparseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerLoop + "  for sparse graph ");
+				sparseGraphData[sparseLoop][1] = calcTime("dijkstraHeap", sparseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerLoop + "  for sparse graph ");
+				sparseGraphData[sparseLoop][2] = calcTime("kruskal", sparseGraph, source, destination);
+
+				sparseLoop++;
+				System.out.print(".");
+			}
+
+			denseGraph = GraphGenerator.genDenseGraph(maxDegree, maxVertices);
+
+			for (int innerIteration = 0; innerIteration < 5; innerIteration++) {
+				t = rn.nextInt(maxVertices);
+				source = new Vertex(t, t);
+				t = rn.nextInt(maxVertices);
+				destination = new Vertex(t, t);
+				GraphGenerator.connectSourceDestination(denseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + " for dense graph ");
+				denseGraphData[denseLopp][0] = calcTime("dijkstra", denseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + "  for dense graph ");
+				denseGraphData[denseLopp][1] = calcTime("dijkstraHeap", denseGraph, source, destination);
+
+//				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + "  for dense graph ");
+				denseGraphData[denseLopp][2] = calcTime("kruskal", denseGraph, source, destination);
+
+				denseLopp++;
+				System.out.print(".");
+			}
+
+		}
+
+		// Printing the Dense Graph Statistics
+		System.out.println();
+		double[] avgDense = new double[3];
+		double[] avgSparse = new double[3];
+		System.out.println("GraphType,LoopCount,Dijkstra,DijkstraWithHeap,Kruskal");
+		for (int i = 0; i < denseGraphData.length; i++) {
+
+			
+			System.out.println(String.format("Dense,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", (i + 1),
+					denseGraphData[i][0], denseGraphData[i][1], denseGraphData[i][2]));
+
+			avgDense[0] += denseGraphData[i][0];
+			avgDense[1] += denseGraphData[i][1];
+			avgDense[2] += denseGraphData[i][2];
+
+		}
+		// printing average values
+		for (int i = 0; i < 3; i++) {
+			avgDense[i] /= 25;
+		}
+		System.out.println(String.format("Average of Dense,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", 0, avgDense[0],
+				avgDense[1], avgDense[2]));
+
+		// sparse
+		for (int i = 0; i < sparseGraphData.length; i++) {
+
+			
+			System.out.println(String.format("Sparse,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", (i + 1),
+					sparseGraphData[i][0], sparseGraphData[i][1], sparseGraphData[i][2]));
+
+			avgSparse[0] += sparseGraphData[i][0];
+			avgSparse[1] += sparseGraphData[i][1];
+			avgSparse[2] += sparseGraphData[i][2];
+
+		}
+		// printing average values
+		for (int i = 0; i < 3; i++) {
+			avgSparse[i] /= 25;
+		}
+		System.out.println(String.format("Average of Sparse,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", 0, avgSparse[0],
+				avgSparse[1], avgSparse[2]));
+		// Printing the Sparse Graph Statistics
+		System.out.println("Completed");
+
+	}
+
+	private static double calcTime(String algoType, Graph G, Vertex source, Vertex destination) {
+		double startTime = System.nanoTime();
+		switch (algoType) {
+		case "dijkstra":
+			new Dijkstra(G, source, destination);
+			break;
+		case "kruskal":
+			new Kruskal(G, source, destination);
+			break;
+		case "dijkstraHeap":
+			new DijkstraHeap(G, source, destination);
+			break;
+		default:
+			break;
+		}
+		double endTime = System.nanoTime();
+		double duration = endTime - startTime;
+		duration /= 1000000; // Getting Time in Millisecond
+//		System.out.println(algoType + " completed");
+		return duration;
+	}
+}
