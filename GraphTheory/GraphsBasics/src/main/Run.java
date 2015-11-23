@@ -16,8 +16,8 @@ public class Run {
 		double startTime = 0, endTime = 0, duration = 0;
 		Random rn = new Random();
 
-		double[][] denseGraphData = new double[50][3];
-		double[][] sparseGraphData = new double[50][3];
+		double[][] denseGraphData = new double[25][3];
+		double[][] sparseGraphData = new double[25][3];
 		int denseLopp = 0, sparseLoop = 0;
 		System.out.print("Processing...");
 		
@@ -77,12 +77,14 @@ public class Run {
 		System.out.println();
 		double[] avgDense = new double[3];
 		double[] avgSparse = new double[3];
-		System.out.println("GraphType,LoopCount,Dijkstra,DijkstraWithHeap,Kruskal");
+		System.out.println("LoopCount,GraphType,AlgoType,Time(milliseconds)");
 		for (int i = 0; i < denseGraphData.length; i++) {
 
 			
-			System.out.println(String.format("Dense,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", (i + 1),
-					denseGraphData[i][0], denseGraphData[i][1], denseGraphData[i][2]));
+			System.out.println(String.format("%2d,Dense,Dijkstra,%10.5f", i,denseGraphData[i][0] ));
+			System.out.println(String.format("%2d,Dense,DijkstraWithHeap,%10.5f", i,denseGraphData[i][1] ));
+			System.out.println(String.format("%2d,Dense,Kruskal,%10.5f", i,denseGraphData[i][2] ));
+				
 
 			avgDense[0] += denseGraphData[i][0];
 			avgDense[1] += denseGraphData[i][1];
@@ -93,15 +95,18 @@ public class Run {
 		for (int i = 0; i < 3; i++) {
 			avgDense[i] /= 25;
 		}
-		System.out.println(String.format("Average of Dense,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", 0, avgDense[0],
+		System.out.println("GraphType,Dijkstra,DijkstraHeap,Kruskal)");
+		System.out.println(String.format("Average of Dense,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds",  avgDense[0],
 				avgDense[1], avgDense[2]));
 
 		// sparse
 		for (int i = 0; i < sparseGraphData.length; i++) {
 
 			
-			System.out.println(String.format("Sparse,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", (i + 1),
-					sparseGraphData[i][0], sparseGraphData[i][1], sparseGraphData[i][2]));
+			
+			System.out.println(String.format("%2d,Sparse,Dijkstra,%10.5f", i,sparseGraphData[i][0] ));
+			System.out.println(String.format("%2d,Sparse,DijkstraWithHeap,%10.5f", i,sparseGraphData[i][1] ));
+			System.out.println(String.format("%2d,Sparse,Kruskal,%10.5f", i,sparseGraphData[i][2] ));
 
 			avgSparse[0] += sparseGraphData[i][0];
 			avgSparse[1] += sparseGraphData[i][1];
@@ -112,7 +117,8 @@ public class Run {
 		for (int i = 0; i < 3; i++) {
 			avgSparse[i] /= 25;
 		}
-		System.out.println(String.format("Average of Sparse,%2d,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds", 0, avgSparse[0],
+		System.out.println("GraphType,Dijkstra,DijkstraHeap,Kruskal)");
+		System.out.println(String.format("Average of Sparse,%10.5f milliseconds,%10.5f milliseconds,%10.5f milliseconds",  avgSparse[0],
 				avgSparse[1], avgSparse[2]));
 		// Printing the Sparse Graph Statistics
 		System.out.println("Completed");
