@@ -10,6 +10,7 @@ public class DijkstraHeap {
 	{
 		int s = source.value;
 		int t = destination.value;
+		int count =0;
 		int V=G.getV();
 		heapMatrix = new int[V];
 		if( !isValid(s, t, V) ){
@@ -21,50 +22,58 @@ public class DijkstraHeap {
 		int[] parent = new int[V];
 		
 		
-		for(int i=0;i<V;i++)
-		{
-			vertexStatus.put(i,"Unmarked");
+		while(count < V){
+			vertexStatus.put(count,"Unmarked");
+			count++;			
 		}
 		Map<Integer,Vertex> vertexArray=new HashMap<Integer,Vertex>(V);
 		vertexStatus.put(s,"Marked");
 		parent[s]=0; distance[s]=0;		
 		
 		int edgeWeight=-1;
-		for(int i=0;i<V;i++)
-		{	
-			edgeWeight=G.getEdgeWeight(s, i);
+		count = 0;
+		while(count < V){
+			edgeWeight=G.getEdgeWeight(s, count);
 			if(edgeWeight!=0) 
 			{
-				vertexStatus.put(i,"Out");
-				parent[i]=s;
-				distance[i]=edgeWeight;
-				heapMatrix[i] = insertMaxHeap(vertexArray, new Vertex(i,distance[i]));
+				vertexStatus.put(count,"Out");
+				parent[count]=s;
+				distance[count]=edgeWeight;
+				heapMatrix[count] = insertMaxHeap(vertexArray, new Vertex(count,distance[count]));
 			}
+			count++;
 		}
 		
 		
 		while(heapCount>0)
 		{
 			int vNumber=vertexArray.get(0).name;
-			deleteMaxHeap(vertexArray, heapMatrix[vNumber]);
+			vertexArray.put(heapMatrix[vNumber], vertexArray.get(heapCount-1));
+	    	heapMatrix[vertexArray.get(heapCount-1).name]=heapMatrix[vNumber];
+			heapCount=heapCount-1;
+	    	maxHeapify(vertexArray, heapMatrix[vNumber]);
 			vertexStatus.put(vNumber,"Marked");
-			for(int i=0;i<V;i++)
+			for(count=0;count<V;count++)
 			{	
-				edgeWeight=G.getEdgeWeight(vNumber, i);
+				edgeWeight=G.getEdgeWeight(vNumber, count);
 				if(edgeWeight>0) 
 				{	
-					if (vertexStatus.get(i).equals("Unmarked")) {
-						vertexStatus.put(i,"Out");
-						distance[i]=Math.min(distance[vNumber], edgeWeight);
-						parent[i]=vNumber;
-						heapMatrix[i] = insertMaxHeap(vertexArray, new Vertex(i,distance[i]));
+					if (vertexStatus.get(count).equals("Unmarked")) {
+						vertexStatus.put(count,"Out");
+						distance[count]=Math.min(distance[vNumber], edgeWeight);
+						parent[count]=vNumber;
+						heapMatrix[count] = insertMaxHeap(vertexArray, new Vertex(count,distance[count]));
 						
 						}
-					else if(vertexStatus.get(i).equals("Out") && distance[i]<Math.min(distance[vNumber], edgeWeight)){
-						deleteMaxHeap(vertexArray, heapMatrix[i]);
-						distance[i]=Math.min(distance[vNumber],edgeWeight);
-						parent[i]=vNumber; 
-						heapMatrix[i] = insertMaxHeap(vertexArray, new Vertex(i,distance[i]));
+					else if(vertexStatus.get(count).equals("Out") && distance[count]<Math.min(distance[vNumber], edgeWeight)){
+						int x =  heapMatrix[count];
+						vertexArray.put(x, vertexArray.get(heapCount-1));
+				    	heapMatrix[vertexArray.get(heapCount-1).name]=x;
+						heapCount=heapCount-1;
+				    	maxHeapify(vertexArray, x);					
+						distance[count]=Math.min(distance[vNumber],edgeWeight);
+						parent[count]=vNumber; 
+						heapMatrix[count] = insertMaxHeap(vertexArray, new Vertex(count,distance[count]));
 					}
 						
 				}
@@ -76,59 +85,67 @@ public class DijkstraHeap {
 	}
 	
 	public static int insertMaxHeap(Map<Integer,Vertex> vertexArray, Vertex x) {  
-    	heapCount=heapCount+1;
-    	int insertionPoint = heapCount-1;
+    	int insertionPoint = heapCount;
+    	heapCount++;
     	vertexArray.put(insertionPoint,x);
-    	int t; 
+    	int t = (insertionPoint%2 == 0) ? (insertionPoint/2 -1) : (insertionPoint/2); 
     	Vertex temp;
-    	if(insertionPoint%2 == 0)
-    		t = insertionPoint/2 - 1;
-    	else
-    		t = insertionPoint/2;
-    	while(insertionPoint > 0 && vertexArray.get(insertionPoint).value > vertexArray.get(t).value) {  
+    	
+    	while(goAhead(vertexArray,insertionPoint,t)) {  
     		temp = vertexArray.get(insertionPoint);  
     		vertexArray.put(insertionPoint,vertexArray.get(t));
     		vertexArray.put(t,temp);
     		heapMatrix[vertexArray.get(insertionPoint).name]=insertionPoint;
     		insertionPoint = t;
-    		if(insertionPoint%2 == 0)
-    			t = insertionPoint/2 - 1;
-    		else
-    			t = insertionPoint/2;
+    		 t = (insertionPoint%2 == 0) ? (insertionPoint/2 -1) : (insertionPoint/2);
     	}	
     	return insertionPoint; 
     }
-	static void deleteMaxHeap(Map<Integer,Vertex> vertexArray, int x) { 
-		vertexArray.put(x, vertexArray.get(heapCount-1));
-    	heapMatrix[vertexArray.get(heapCount-1).name]=x;
-		heapCount=heapCount-1;
-    	maxHeapify(vertexArray, x);
-    }
-	static void maxHeapify(Map<Integer,Vertex> vertexArray, int i) {
-    	int left,right,largest;
-    	Vertex temp;
-    	left = 2*i + 1;
-    	right = 2*i + 2;
-    	if(left < heapCount && vertexArray.get(left).value > vertexArray.get(i).value)
-    		largest = left;
-    	else
-    		largest = i;
-    	if(right < heapCount && vertexArray.get(right).value > vertexArray.get(largest).value)
-    		largest = right;
-    	if(largest != i) {
-    		temp = vertexArray.get(largest);
-    		vertexArray.put(largest,vertexArray.get(i));
-    		vertexArray.put(i,temp);
-    		heapMatrix[vertexArray.get(i).name]=i;
-    		heapMatrix[vertexArray.get(largest).name]=largest;
-    		maxHeapify(vertexArray, largest);
-    	}
+	
+	static void maxHeapify(Map<Integer,Vertex> vertexArray, int count) {
+		
+    	int rightVal = 2 * count + 2;
+		int leftVal = 2 * count + 1;
+		int maxVal = count;
+		
+		if(rightVal < heapCount){
+			 if (vertexArray.get(rightVal).value > vertexArray.get(count).value) {
+					maxVal = rightVal;
+				}
+		}
+		 if (leftVal < heapCount) {
+			if (vertexArray.get(leftVal).value > vertexArray.get(count).value) {
+				maxVal = leftVal;
+			} 
+		}
+		if (count != maxVal) {
+			Vertex temp = vertexArray.get(maxVal);
+    		vertexArray.put(maxVal,vertexArray.get(count));
+    		vertexArray.put(count,temp);
+    		heapMatrix[vertexArray.get(count).name]=count;
+    		heapMatrix[vertexArray.get(maxVal).name]=maxVal;
+    		maxHeapify(vertexArray, maxVal);
+		}
     }
 	private boolean isValid(int s, int t, int V) {
-		if(s<0 || t<0 || s>V-1 || t>V-1){
-			return false;
-		}else{
+		boolean valid = true;
+		if( s>V-1 ){
+			valid = false;
+		}
+		else if(t>V-1){
+			valid = false;
+		}
+		
+		return valid;
+	}
+	public static boolean goAhead(Map<Integer,Vertex> vertexArray, int i, int t){
+		if(i > 0 && vertexArray.get(i).value > vertexArray.get(t).value  ){
 			return true;
 		}
+		else{
+			return false;
+		}
+		
 	}
+
 }

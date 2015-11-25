@@ -12,24 +12,23 @@ public class Run {
 		Vertex destination = new Vertex(0, 0);
 		Graph denseGraph = null;
 		Graph sparseGraph = null;
-		int vertexMaxDegree = 10;
-		double startTime = 0, endTime = 0, duration = 0;
 		Random rn = new Random();
-
+		int sparseLoop = 0;
+		int denseLoop = 0;
 		double[][] denseGraphData = new double[25][3];
 		double[][] sparseGraphData = new double[25][3];
-		int denseLopp = 0, sparseLoop = 0;
+		
+		
 		System.out.print("Processing...");
 		
-		for (int outerLoop = 0; outerLoop < 5; outerLoop++) {
+		for (int j = 0; j < 5; j++) {
 
 			int maxVertices = 5000;
 			int maxDegree = 1000;
 			int minDegree = 6;
-			GraphGenerator gn = new GraphGenerator();
 			sparseGraph = GraphGenerator.genSparseGraph(minDegree, maxVertices);
 
-			for (int innerLoop = 0; innerLoop < 5; innerLoop++) {
+			for (int k = 0; k < 5; k++) {
 				t = rn.nextInt(maxVertices);
 				source = new Vertex(t, t);
 				t = rn.nextInt(maxVertices);
@@ -51,7 +50,7 @@ public class Run {
 
 			denseGraph = GraphGenerator.genDenseGraph(maxDegree, maxVertices);
 
-			for (int innerIteration = 0; innerIteration < 5; innerIteration++) {
+			for (int k = 0; k < 5; k++) {
 				t = rn.nextInt(maxVertices);
 				source = new Vertex(t, t);
 				t = rn.nextInt(maxVertices);
@@ -59,16 +58,17 @@ public class Run {
 				GraphGenerator.connectSourceDestination(denseGraph, source, destination);
 
 //				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + " for dense graph ");
-				denseGraphData[denseLopp][0] = calcTime("dijkstra", denseGraph, source, destination);
+				denseGraphData[denseLoop][0] = calcTime("dijkstra", denseGraph, source, destination);
 
 //				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + "  for dense graph ");
-				denseGraphData[denseLopp][1] = calcTime("dijkstraHeap", denseGraph, source, destination);
+				denseGraphData[denseLoop][1] = calcTime("dijkstraHeap", denseGraph, source, destination);
 
 //				System.out.print("iteration:" + outerLoop + " loop:" + innerIteration + "  for dense graph ");
-				denseGraphData[denseLopp][2] = calcTime("kruskal", denseGraph, source, destination);
+				denseGraphData[denseLoop][2] = calcTime("kruskal", denseGraph, source, destination);
 
-				denseLopp++;
+				denseLoop++;
 				System.out.print(".");
+				
 			}
 
 		}

@@ -5,104 +5,109 @@ public class Kruskal {
 	public static int heapSize=0;
 	public  Kruskal(Graph graph, Vertex s, Vertex t) 
 	{
-		int source = s.name;
-		int destination = t.name;
-		int countVertices=graph.getV();
-		
+		int countVertices = graph.getV();
 		Edge[] edgeList = new Edge[graph.getE()];
 		graph.getEdgeList().toArray(edgeList);
-		kruskalSort(edgeList);
-		
-		int[] parent = new int[countVertices];
-		int[] rank = new int[countVertices];
-		
-		for(int i=0;i<countVertices;i++)
-		{
-			parent[i]=i;  
-			rank[i]=0;
+		heapSize = edgeList.length;
+		heapSize--;
+		int heapCount = heapSize / 2;
+		while (heapCount >= 0) {
+			kruskalMaxHeap(edgeList, heapCount);
+			heapCount--;
+		}
+
+		heapCount = heapSize;
+		Edge tmpEdge;
+		while (heapCount > 0) {
+			
+			tmpEdge = edgeList[0];
+			edgeList[0] = edgeList[heapCount];
+			edgeList[heapCount] = tmpEdge;			
+			heapSize--;
+			kruskalMaxHeap(edgeList, 0);
+			//kruskalMaxHeap(edgeList, heapCount);
+			heapCount--;
 		}
 		
-		List<Edge> vertexTree=new ArrayList<Edge>();
-		int u,v,v1,v2;
-		Edge edge;
-		
-		for(int i=0;i<edgeList.length;i++)
-		{
-			edge=edgeList[i];
-			u=edge.getFrom();
-			v=edge.getTo();
-			v1=find(u,parent);
-			v2=find(v,parent);
-			if(v1!=v2)
-			{
-				vertexTree.add(edge);
-				Union(v1,v2,parent,rank);
-				if(vertexTree.size()==countVertices-1)
-					break;
+		Map<Integer, Integer> rank = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> parent = new HashMap<Integer, Integer>();
+
+		for (int i = 0; i < graph.getV(); i++) {
+			rank.put(i, 0);
+			parent.put(i, i);
+		}
+
+		List<Edge> vertexTree = new ArrayList<Edge>();
+		int v1, v2;
+
+		int count = 0;
+		int length = edgeList.length;
+		while (count < length) {
+			v1 = edgeList[count].getFrom();
+			while (v1 != parent.get(v1)) {
+				parent.put(v1, parent.get(parent.get(v1)));
+				v1 = parent.get(v1);
 			}
+			v2 = edgeList[count].getTo();
+			while (v2 != parent.get(v2)) {
+				parent.put(v2, parent.get(parent.get(v2)));
+				v2 = parent.get(v2);
+			}
+			if (v1 != v2) {
+				vertexTree.add(edgeList[count]);
+				Union(v1, v2, parent, rank);
+				if (vertexTree.size() + 1 == countVertices) {
+					break;
+				}
+			}
+			count++;
 		}
 		
 
 	}
-	public static void kruskalSort(Edge[] edgeList)
-	{	 
-		  kruskalHeapify(edgeList);        
-	        for (int i = heapSize; i > 0; i--)
-	        {
-	            kruskalSwap(edgeList,0, i);
-	            heapSize = heapSize-1;
-	            kruskalMaxHeap(edgeList, 0);
-	        }
-	}
-	public static void kruskalHeapify(Edge[] edgeList)
-    {
-        heapSize = edgeList.length-1;
-        for (int i = heapSize/2; i >= 0; i--)
-            kruskalMaxHeap(edgeList, i);        
-    }
-	public static void kruskalSwap(Edge[] edgeList, int left, int right)
-    {
 
-        Edge tmp = edgeList[left];
-        edgeList[left] = edgeList[right]; 
-        edgeList[right] = tmp;
-    }
-	public static void kruskalMaxHeap(Edge[] edgeList, int i)
-    { 
-    	int left = 2*i ;
-        int right = 2*i + 1;
-        int max = i;
-        if (left <= heapSize && edgeList[left].getWeight() < edgeList[i].getWeight())
-            max = left;
-        if (right <= heapSize && edgeList[right].getWeight() < edgeList[max].getWeight() )        
-            max = right;
- 
-        if (max != i)
-        {
-            kruskalSwap(edgeList, i, max);
-            kruskalMaxHeap(edgeList, max);
-        }
-    }  
 	
-	public static int find(int vertex, int[] parent)
-	{
-	    while (vertex != parent[vertex]) {
-            parent[vertex] = parent[parent[vertex]]; 
-            vertex = parent[vertex];
-        }
-        return vertex;
+	public static void kruskalMaxHeap(Edge[] edgeList, int count) {
+
+		int maxVal = count;
+		int rightVal = 2 * count + 1;
+		int leftVal = 2 * count;
+				
+		 if(validWeight(edgeList, count, leftVal)) {
+				maxVal = leftVal;
+			} 
+			if (validWeight(edgeList, maxVal, rightVal)) {
+				maxVal = rightVal;
+			}
+			
 		
- 	}
-	public static void Union(int v1, int v2,int[] parent, int[] rank)
-	{
-		if(rank[v1]>rank[v2])
-			parent[v1]=v2;
-		else if(rank[v1]<rank[v2])
-			parent[v2]=v1;
-		else
-		{
-			parent[v1]=v2;
-			rank[v1]=rank[v1]+1;
+		if (count != maxVal) {
+			
+			Edge tmpEdge = edgeList[count];
+			edgeList[count] = edgeList[(maxVal)];
+			edgeList[(maxVal)] = tmpEdge;
+			kruskalMaxHeap(edgeList, maxVal);
+		}
+		//
+		
+	}
+
+
+	private static boolean validWeight(Edge[] edgeList, int count, int val) {
+		return ( (val <= heapSize) && (edgeList[val].getWeight() < edgeList[count].getWeight() )  );
+	}
+
+	
+	
+	public static void Union(int v1, int v2, Map<Integer, Integer> parent, Map<Integer, Integer> rank) {
+		if (rank.get(v1) < rank.get(v2))
+			parent.put(v2, v1);
+		else if (rank.get(v1) > rank.get(v2))
+			parent.put(v1, v2);
+		else {
+			rank.put(v1, rank.get(v1) + 1);
+			parent.put(v1, v2);
+
 		}
 	}
 

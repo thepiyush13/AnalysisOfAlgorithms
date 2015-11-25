@@ -59,7 +59,6 @@ public class GraphGenerator {
 		int maxWeight = 100;
 		boolean validEdge = true;
 		int maxEdges = maxVertices * maxVertices;
-		String fileName = "";
 		Vertex rndNode;
 		int rndInt = 0;
 		// pick any one and get it`s degree
@@ -147,7 +146,7 @@ public class GraphGenerator {
 	{
 				List<Integer> unmarkedVertices=new ArrayList<Integer>();
 				List<Integer> markedVertices=new ArrayList<Integer>();
-				
+				int limit  = 20;
 				int initialVertex=0, finalVertex=0;
 				for(int i=0; i<graph.getV();i++)
 				{	
@@ -165,7 +164,7 @@ public class GraphGenerator {
 							
 					if(rndMarkedVertex!=-1)
 					{	
-						rndWeight=rn.nextInt(20)+2;
+						rndWeight=rn.nextInt(limit)+2;
 						graph.addEdge(new Vertex(rndMarkedVertex,rndMarkedVertex),
 								new Vertex(rndUnmarkedVertex,rndUnmarkedVertex), rndWeight);
 						markedVertices.add((Integer)rndUnmarkedVertex);
@@ -183,10 +182,10 @@ public class GraphGenerator {
 				}
 				
 				finalVertex=rndUnmarkedVertex;
-				rndWeight=rn.nextInt(20)+2;
+				rndWeight=rn.nextInt(limit)+2;
 				graph.addEdge(source,new Vertex(initialVertex,initialVertex), rndWeight);
 				
-				rndWeight=rn.nextInt(20)+2;
+				rndWeight=rn.nextInt(limit)+2;
 				graph.addEdge(destination,new Vertex(finalVertex,finalVertex), rndWeight);
 		
 	}
